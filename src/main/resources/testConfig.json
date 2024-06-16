@@ -1,0 +1,9 @@
+{
+  "target": "0:dead",
+  "type": "SETCODE_2_2",
+  "owners": [
+    "peter", "jason", "louis", "francis"
+  ],
+  "reqConfirms": 3,
+  "lifetime": 86400
+}

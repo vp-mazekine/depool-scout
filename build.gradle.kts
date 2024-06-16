@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.9.22"
+    kotlin("jvm") version "2.0.0"
     application
     id("com.github.johnrengelman.shadow") version "7.1.2"
 }
@@ -13,6 +13,7 @@ repositories {
 
 dependencies {
     implementation("tech.deplant.java4ever:java4ever-framework:3.0.0")
+    implementation("com.google.code.gson:gson:2.11.0")
 }
 
 tasks.test {
@@ -20,7 +21,7 @@ tasks.test {
 }
 
 kotlin {
-    jvmToolchain(20)
+    jvmToolchain(22)
 }
 
 application {
