@@ -6,6 +6,8 @@ import tech.deplant.java4ever.framework.Sdk
 import java.math.BigInteger
 
 fun main(args: Array<String>) {
+    EverSdk.load()
+
     val sdk = Sdk.DEFAULT()
 
     /*ContractWrapper.generate(
