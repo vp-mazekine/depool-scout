@@ -1,0 +1,14 @@
+{
+  "source_path" : "C:\\Dev\\everscale-address-miner",
+  "build_path" : "C:\\Dev\\everscale-address-miner",
+  "compiler" : {
+    "compilerPath" : "C:\\Dev\\everscale-address-miner"
+  },
+  "linker" : {
+    "linkerPath" : "C:\\Dev\\everscale-address-miner",
+    "stdlibSolPath" : "C:\\Dev\\everscale-address-miner"
+  },
+  "abis" : { },
+  "tvcs" : { },
+  "keys" : { }
+}
