@@ -13,7 +13,7 @@ repositories {
 }
 
 dependencies {
-    implementation("tech.deplant.java4ever:java4ever-framework:3.0.0")
+    implementation("tech.deplant.java4ever:java4ever-framework:3.0.4")
     implementation("com.google.code.gson:gson:2.11.0")
     implementation("org.bouncycastle:bcprov-jdk18on:1.78.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.8.1")

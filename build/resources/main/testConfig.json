@@ -10,7 +10,7 @@
   ],
   "reqConfirms": 3,
   "lifetime": 86400,
-  "processes": 50,
+  "processes": 100,
   "weighsAlgorithm": "TARGET_ENDS",
-  "startFromPk": "d82cc187b97602b52b40899f05ad60abec8f49632d9da30ed8bbaa2d3dc5e251"
+  "startFromPk": null
 }
