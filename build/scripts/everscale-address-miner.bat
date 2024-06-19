@@ -68,11 +68,11 @@ goto fail
 :execute
 @rem Setup the command line
 
-set CLASSPATH=%APP_HOME%\lib\everscale-address-miner-1.0-SNAPSHOT.jar;%APP_HOME%\lib\kotlin-stdlib-1.9.22.jar;%APP_HOME%\lib\java4ever-framework-2.5.0.jar;%APP_HOME%\lib\annotations-13.0.jar;%APP_HOME%\lib\java4ever-binding-2.5.0.jar;%APP_HOME%\lib\commons-core-0.5.0.jar;%APP_HOME%\lib\javapoet-core-2.0.0.jar;%APP_HOME%\lib\jackson-datatype-jdk8-2.15.2.jar;%APP_HOME%\lib\jackson-datatype-jsr310-2.15.2.jar;%APP_HOME%\lib\jackson-module-parameter-names-2.15.2.jar;%APP_HOME%\lib\jackson-databind-2.15.2.jar;%APP_HOME%\lib\jackson-annotations-2.15.2.jar;%APP_HOME%\lib\jackson-core-2.15.2.jar
+set CLASSPATH=%APP_HOME%\lib\everscale-address-miner-1.0-SNAPSHOT.jar;%APP_HOME%\lib\kotlinx-coroutines-core-jvm-1.8.1.jar;%APP_HOME%\lib\kotlin-stdlib-2.0.0.jar;%APP_HOME%\lib\java4ever-framework-3.0.0.jar;%APP_HOME%\lib\gson-2.11.0.jar;%APP_HOME%\lib\bcprov-jdk18on-1.78.1.jar;%APP_HOME%\lib\annotations-23.0.0.jar;%APP_HOME%\lib\java4ever-binding-3.0.0.jar;%APP_HOME%\lib\error_prone_annotations-2.27.0.jar;%APP_HOME%\lib\commons-core-0.7.0.jar;%APP_HOME%\lib\javapoet-core-2.0.0.jar;%APP_HOME%\lib\jackson-datatype-jdk8-2.16.1.jar;%APP_HOME%\lib\jackson-datatype-jsr310-2.16.1.jar;%APP_HOME%\lib\jackson-module-parameter-names-2.16.1.jar;%APP_HOME%\lib\jackson-databind-2.16.1.jar;%APP_HOME%\lib\jackson-annotations-2.16.1.jar;%APP_HOME%\lib\jackson-core-2.16.1.jar
 
 
 @rem Execute everscale-address-miner
-"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %EVERSCALE_ADDRESS_MINER_OPTS%  -classpath "%CLASSPATH%" MainKt %*
+"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %EVERSCALE_ADDRESS_MINER_OPTS%  -classpath "%CLASSPATH%" com.mazekine.everscale.addressMiner.MainKt %*
 
 :end
 @rem End local scope for the variables with windows NT shell

@@ -1,9 +1,16 @@
 {
-  "target": "0:dead",
+  "target": "0:0000000011111111222222223333333344444444555555556666666677777777",
   "type": "SETCODE_2_2",
   "owners": [
-    "peter", "jason", "louis", "francis"
+    "d65c20d795413907868b64eb313f52ffdd2f62309962a4ecda45a82e71024dda",
+    "ccb05ecf4fb2234b78ae9ff4bb16cdb7fe01c2f1e99a2cc12d2980acecf655f6",
+    "6baf1ca74f7d1b8406e4ca28d23f52c4fbdc58b624a6cc12100ea5287006353c",
+    "f4024f200e76762c5b7a8d18b47c3e11e07856ae76a63d2ec6a280c6cce4e3a5",
+    "0a0a8f809a94e0e4fe64be84932f20093a368cefc2a10c7d7d6ad3c3f1046efd"
   ],
   "reqConfirms": 3,
-  "lifetime": 86400
+  "lifetime": 86400,
+  "processes": 100,
+  "weighsAlgorithm": "TARGET_ENDS",
+  "startFromPk": null
 }
