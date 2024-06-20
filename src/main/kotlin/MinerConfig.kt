@@ -10,5 +10,6 @@ data class MinerConfig(
     val lifetime: Long = 86400,
     val processes: Int = 100,
     val weighsAlgorithm: WeighsAlgorithm,
+    val endpoint: String,
     val startFromPk: String?,
 )

@@ -10,7 +10,8 @@
   ],
   "reqConfirms": 3,
   "lifetime": 86400,
-  "processes": 100,
+  "processes": 200,
   "weighsAlgorithm": "TARGET_ENDS",
+  "endpoint": "https://mainnet.evercloud.dev/a34c80b2ed484776878ad8bbf48ee4d0/graphql",
   "startFromPk": null
 }

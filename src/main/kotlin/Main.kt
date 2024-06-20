@@ -10,6 +10,7 @@ import kotlinx.coroutines.channels.Channel
 import network.everscale.SetcodeMultisigTemplate
 import tech.deplant.java4ever.binding.Crypto
 import tech.deplant.java4ever.binding.EverSdk
+import tech.deplant.java4ever.framework.Account
 import tech.deplant.java4ever.framework.Credentials
 import java.io.File
 import java.math.BigInteger
@@ -18,13 +19,14 @@ import java.util.*
 import kotlin.math.pow
 import kotlin.system.exitProcess
 
-val bestMatch = Match("", Credentials.NONE, 0.0F, "")
+val bestMatch = Match("", Credentials.NONE, 0.0F, "", "")
 val gson: Gson =
     GsonBuilder()
         .setStrictness(Strictness.LENIENT)
         .setPrettyPrinting()
         .create()
 val logName = "addressMiner_log_" + System.currentTimeMillis() + ".log"
+var balanceAvailable = false
 
 sealed class Command
 
@@ -79,7 +81,13 @@ CONFIG:
     )*/
 
     EverSdk.load()
-    val contextId = EverSdk.createDefault()
+    val contextId: Int
+    if (config.endpoint.trim() == "") {
+        contextId = EverSdk.createDefault()
+    } else {
+        contextId = EverSdk.createWithEndpoint(config.endpoint)
+        balanceAvailable = true
+    }
 
     println("Heap size: " + "# ### ###".format(Runtime.getRuntime().totalMemory()))
 
@@ -307,7 +315,7 @@ private suspend fun runSearch(
                     launch process@{
                         try {
                             val keys = Credentials.ofRandom(contextId)
-                            var result =
+                            val deployAddress =
                                 walletTemplate
                                     .prepareDeploy(
                                         contextId,
@@ -317,6 +325,9 @@ private suspend fun runSearch(
                                         reqConfirms,
                                         lifetime,
                                     ).toAddress()
+
+                            var result =
+                                deployAddress
                                     .toString()
                                     .split(":")
                                     .last()
@@ -332,6 +343,10 @@ private suspend fun runSearch(
                                 bestMatch.score = matchScore
                                 bestMatch.credentials = keys
                                 bestMatch.mask = matchMask
+                                if (balanceAvailable) {
+                                    bestMatch.balance =
+                                        Account.ofAddress(contextId, deployAddress).balance
+                                }
 
                                 println(
                                     "\n[I$iteration] New best match found: " + "%.2f%%".format(matchScore * 100) + "\n" +
@@ -341,6 +356,11 @@ private suspend fun runSearch(
                                 )
 
                                 appendLog(iteration)
+
+                                if (target == result) {
+                                    println("Target found in $iteration iterations!")
+                                    exitProcess(0)
+                                }
                             }
                         } catch (e: Error) {
                             colored {

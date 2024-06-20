@@ -7,4 +7,5 @@ data class Match(
     var credentials: Credentials,
     var score: Float,
     var mask: String,
+    var balance: String,
 )
