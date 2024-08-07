@@ -1,12 +1,12 @@
 {
-  "source_path" : "C:\\Dev\\everscale-address-miner",
-  "build_path" : "C:\\Dev\\everscale-address-miner",
+  "source_path" : "C:\\Dev\\depool-scout",
+  "build_path" : "C:\\Dev\\depool-scout",
   "compiler" : {
-    "compilerPath" : "C:\\Dev\\everscale-address-miner"
+    "compilerPath" : "C:\\Dev\\depool-scout"
   },
   "linker" : {
-    "linkerPath" : "C:\\Dev\\everscale-address-miner",
-    "stdlibSolPath" : "C:\\Dev\\everscale-address-miner"
+    "linkerPath" : "C:\\Dev\\depool-scout",
+    "stdlibSolPath" : "C:\\Dev\\depool-scout"
   },
   "abis" : { },
   "tvcs" : { },
