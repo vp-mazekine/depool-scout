@@ -73,7 +73,8 @@ var stakeholderCache: MutableMap<
 > = mutableMapOf()
 
 fun main(args: Array<String>) {
-    var useCache = false
+    var useDepoolCache = false
+    var useStakeholderCache = false
     var stakeholderAddress = ""
     var config: AppConfig? = null
 
@@ -82,9 +83,14 @@ USAGE:
     java -jar depoolScoutFat.jar [PARAMS]
 
 PARAMS:
-    -us, --use-cache        Use the list of depools from cache file (if available)
+    -usc, --use-stakeholder-cache   Use the cached* list of depools filtered by stakeholder (if available).
+                                    This cache has a priority vs. ordinary depool cache.
+    -udc, --use-depool-cache        Use the list of depools from cache* file (if available).
     -c,  --config           JSON configuration file
     -s,  --stakeholder      Stakeholder to search for. If not specified, full scanning will be performed
+    
+NOTES:
+    *   Cache files are rebuilt during the full depool scanning without stakeholder specified.
         """
 
     if (args.isEmpty()) {
@@ -96,8 +102,12 @@ PARAMS:
 
     while (i < args.size) {
         when (args[i]) {
-            "-uc", "--use-cache" -> {
-                useCache = true
+            "-udc", "--use-depool-cache" -> {
+                useDepoolCache = true
+            }
+
+            "-usc", "--use-stakeholder-cache" -> {
+                useStakeholderCache = true
             }
 
             "-c", "--config" -> {
@@ -170,8 +180,7 @@ PARAMS:
             EverSdk.createWithEndpoint(config.network.endpoint)
         }
 
-    loadDepoolsList(contextId, useCache)
-    val depoolReport: MutableList<DePoolReportEntry> = mutableListOf()
+    loadDepoolsList(contextId, useDepoolCache, useStakeholderCache, stakeholderAddress)
 
     val fileName =
         "reports/" +
@@ -206,7 +215,11 @@ PARAMS:
     val df = DecimalFormat("##0.00", ds)
 
     depools.forEach { (hash, addresses) ->
-        if (stakeholderAddress != "") logger.info("Looking for participant $stakeholderAddress in ${depoolCodeHashes[hash]} depools...")
+        if (stakeholderAddress == "") {
+            logger.info("Analyzing ${depoolCodeHashes[hash]} depools...")
+        } else {
+            logger.info("Looking for participant $stakeholderAddress in ${depoolCodeHashes[hash]} depools...")
+        }
 
         addresses.forEach { address ->
             analyzeDepool(contextId, hash, address, stakeholderAddress).forEach { v ->
@@ -233,6 +246,14 @@ PARAMS:
     }
 
     logger.info("Report has been saved to $fileName")
+
+    if(stakeholderAddress == "") {
+        File(STAKEHOLDER_CACHE_FILE).writeText(
+            gsonParser.toJson(stakeholderCache)
+        )
+
+        logger.info("Cache files updated")
+    }
 }
 
 private fun String.mask(symbols: Int = 4): String =
@@ -286,7 +307,9 @@ fun initLogger(): KotlinLogger {
 
 private fun loadDepoolsList(
     contextId: Int,
-    fromCache: Boolean = false,
+    useDepoolCache: Boolean = false,
+    useStakeholderCache: Boolean = false,
+    stakeholder: String = ""
 ) {
     val searchDepoolQuery =
         """
@@ -310,11 +333,35 @@ private fun loadDepoolsList(
         }
         """.trimIndent()
 
-    if (fromCache && File(DEPOOL_CACHE_FILE).exists()) {
+    if (
+        useStakeholderCache &&
+        (stakeholder != "") &&
+        File(STAKEHOLDER_CACHE_FILE).exists()
+    ) {
         try {
+            logger.info("Loading depool list from stakeholder cache...")
+            val mapType = object : TypeToken<MutableMap<String, MutableMap<String, MutableList<String>>>>() {}.type
+            stakeholderCache = gsonParser.fromJson(File(STAKEHOLDER_CACHE_FILE).readText(), mapType)
+
+            logger.info("Cache loaded. Looking for stakeholder...")
+            if(!stakeholderCache.containsKey(stakeholder)) {
+                logger.warn("Stakeholder not found. Trying other options...")
+            } else {
+                depools = stakeholderCache[stakeholder]!!
+                logger.info("Depool list loaded from cache")
+                return
+            }
+        } catch (e: Exception) {
+            logger.error("Error loading depool list from cache. Trying other options...\n" + e.message)
+        }
+    }
+
+    if (useDepoolCache && File(DEPOOL_CACHE_FILE).exists()) {
+        try {
+            logger.info("Loading depool list from cache...")
             val mapType = object : TypeToken<MutableMap<String, MutableList<String>>>() {}.type
             depools = gsonParser.fromJson(File(DEPOOL_CACHE_FILE).readText(), mapType)
-            logger.info("Loaded depools list from cache...")
+            logger.info("Depool list loaded from cache")
             return
         } catch (e: Exception) {
             val newFileName = DEPOOL_CACHE_FILE + "." + System.currentTimeMillis() + ".old"
@@ -394,6 +441,12 @@ private fun analyzeDepool(
     val result: MutableList<DePoolReportEntry> = mutableListOf()
 
     participants.forEach { p ->
+        if (stakeholder == "") {
+            updateStakeholderCache(p.toString(), depoolHash, depoolAddress)
+        }
+
+        var matchFound = false
+
         //  Getting information about the participant
         val pInfo = depool.getParticipantInfo(p).get()
 
@@ -473,6 +526,7 @@ private fun analyzeDepool(
 
             result.add(entry)
             colored { print(".".bright.green) }
+            matchFound = true
         }
 
         //  If locked stake belongs to different account, record it there
@@ -484,6 +538,10 @@ private fun analyzeDepool(
             ) &&
             lockedRemaining > 0.toBigDecimal()
         ) {
+            if (stakeholder == "") {
+                updateStakeholderCache(lockDonor, depoolHash, depoolAddress)
+            }
+
             result.add(
                 DePoolReportEntry(
                     depoolAddress,
@@ -499,49 +557,40 @@ private fun analyzeDepool(
                 ),
             )
             colored { print(".".bright.yellow) }
-            /*
-                            if (result.containsKey(lockDonor)) {
-                                result[lockDonor].let { r ->
-                                    if (r!!.lockedStake != null) {
-                                        r.lockedStake!!.apply {
-                                            totalAmount += lockedTotal
-                                            remainingAmount += lockedRemaining
-                                            withdrawableAmount += lockedWithdrawable
-                                        }
-                                    } else {
-                                        r.lockedStake =
-                                            LockedOrVestingStakeEntry(
-                                                lockedTotal,
-                                                lockedRemaining,
-                                                lockedWithdrawable,
-                                                LocalDateTime.ofEpochSecond(lockedEndsOn, 0, ZoneOffset.UTC),
-                                                lockDonor,
-                                                p.toString(),
-                                            )
-                                    }
-                                }
-                            } else {
-                                result[lockDonor] =
-                                    DePoolReportEntry(
-                                        depoolAddress,
-                                        lockDonor,
-                                        0.toBigDecimal(),
-                                        LockedOrVestingStakeEntry(
-                                            lockedTotal,
-                                            lockedRemaining,
-                                            lockedWithdrawable,
-                                            LocalDateTime.ofEpochSecond(lockedEndsOn, 0, ZoneOffset.UTC),
-                                            lockDonor,
-                                            p.toString(),
-                                        ),
-                                        null,
-                                    )
-                            }
-             */
-        } else {
-            print(".")
+            matchFound = true
         }
+
+        if(!matchFound) print(".")
     }
 
     return result
+}
+
+private fun updateStakeholderCache(
+    stakeholder: String,
+    depoolHash: String,
+    depoolAddress: String,
+) {
+    //  If there is no such stakeholder in cache yet
+    if (!stakeholderCache.containsKey(stakeholder)) {
+        stakeholderCache[stakeholder] = mutableMapOf(depoolHash to mutableListOf(depoolAddress))
+        return
+    }
+
+    val stakeholderCacheEntry = stakeholderCache[stakeholder]!!
+
+    //  If there is no such depool hash for this stakeholder yet
+    if (!stakeholderCacheEntry.containsKey(depoolHash)) {
+        stakeholderCache[stakeholder]!![depoolHash] = mutableListOf(depoolAddress)
+        return
+    }
+
+    val depoolList = stakeholderCacheEntry[depoolHash]!!
+
+    //  If there is no such depool for this hash yet
+    if (!depoolList.contains(depoolAddress)) {
+        stakeholderCache[stakeholder]!![depoolHash]!!.add(depoolAddress)
+    }
+
+    //  Cache is up-to-date
 }
