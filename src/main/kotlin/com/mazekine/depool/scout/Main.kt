@@ -35,8 +35,8 @@ import kotlin.system.exitProcess
 
 //  Basic settings
 const val DEBUG = false
-const val DEPOOL_CACHE_FILE = "depoolCache.txt"
-const val STAKEHOLDER_CACHE_FILE = "stakeholderCache.txt"
+const val DEPOOL_CACHE_FILE = "depoolCache.json"
+const val STAKEHOLDER_CACHE_FILE = "stakeholderCache.json"
 
 //  Utilities
 val gsonParser: Gson =
