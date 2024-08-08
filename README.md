@@ -17,7 +17,15 @@ It operates as a console utility loading data from GraphQL via [Java4Ever Framew
 ## Prerequisites
 * [Java 22](https://adoptium.net/temurin/releases/?version=22)
 
-## How to Use
+## Supported code hashes
+* [`b4ad6c42427a12a65d9a0bffb0c2730dd9cdf830a086d94636dab7784e13eb38`](https://everscan.io/contracts/b4ad6c42427a12a65d9a0bffb0c2730dd9cdf830a086d94636dab7784e13eb38)
+* [`21bb78ae9b56ce930adb89bd1e69bdc3dca40683bade9b9a4dfe265129d21220`](https://everscan.io/contracts/21bb78ae9b56ce930adb89bd1e69bdc3dca40683bade9b9a4dfe265129d21220)
+* [`a46c6872712ec49e481a7f3fc1f42469d8bd6ef3fae906aa5b9927e5a3fb3b6b`](https://everscan.io/contracts/a46c6872712ec49e481a7f3fc1f42469d8bd6ef3fae906aa5b9927e5a3fb3b6b)
+* [`14e20e304f53e6da152eb95fffc993dbd28245a775d847eed043f7c78a503885`](https://everscan.io/contracts/14e20e304f53e6da152eb95fffc993dbd28245a775d847eed043f7c78a503885)
+* [`533adf8a5680849177b9f213f61c48dfd8d730597078670d2367a5eef77251fe`](https://everscan.io/contracts/533adf8a5680849177b9f213f61c48dfd8d730597078670d2367a5eef77251fe)
+* [`a21a2e175dc87549280812ecfad50e860d60262fc2d1de6c2230a0108b762934`](https://everscan.io/contracts/a21a2e175dc87549280812ecfad50e860d60262fc2d1de6c2230a0108b762934)
+
+## How to use
 
 Run the following command in console:
 
