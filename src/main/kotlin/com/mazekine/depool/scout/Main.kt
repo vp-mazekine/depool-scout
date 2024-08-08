@@ -35,7 +35,8 @@ import kotlin.system.exitProcess
 
 //  Basic settings
 const val DEBUG = false
-const val DEPOOL_CACHE = "depoolCache.txt"
+const val DEPOOL_CACHE_FILE = "depoolCache.txt"
+const val STAKEHOLDER_CACHE_FILE = "stakeholderCache.txt"
 
 //  Utilities
 val gsonParser: Gson =
@@ -57,6 +58,19 @@ val depoolCodeHashes =
         "a21a2e175dc87549280812ecfad50e860d60262fc2d1de6c2230a0108b762934" to "BroxusDePoolV2",
     )
 var depools: MutableMap<String, MutableList<String>> = mutableMapOf()
+
+//  Cache
+var stakeholderCache: MutableMap<
+    //  Stakeholder address
+    String,
+    //  Depool list cache
+    MutableMap<
+        //  Code hash
+        String,
+        //  Depool addresses
+        MutableList<String>,
+    >,
+> = mutableMapOf()
 
 fun main(args: Array<String>) {
     var useCache = false
@@ -296,16 +310,16 @@ private fun loadDepoolsList(
         }
         """.trimIndent()
 
-    if (fromCache && File(DEPOOL_CACHE).exists()) {
+    if (fromCache && File(DEPOOL_CACHE_FILE).exists()) {
         try {
             val mapType = object : TypeToken<MutableMap<String, MutableList<String>>>() {}.type
-            depools = gsonParser.fromJson(File(DEPOOL_CACHE).readText(), mapType)
+            depools = gsonParser.fromJson(File(DEPOOL_CACHE_FILE).readText(), mapType)
             logger.info("Loaded depools list from cache...")
             return
         } catch (e: Exception) {
-            val newFileName = DEPOOL_CACHE + "." + System.currentTimeMillis() + ".old"
+            val newFileName = DEPOOL_CACHE_FILE + "." + System.currentTimeMillis() + ".old"
             logger.error("Unable to load depools cache. Renaming to $newFileName...")
-            File(DEPOOL_CACHE).renameTo(File(newFileName))
+            File(DEPOOL_CACHE_FILE).renameTo(File(newFileName))
         }
     }
 
@@ -355,7 +369,7 @@ private fun loadDepoolsList(
         }
     }
 
-    File(DEPOOL_CACHE).writeText(gsonParser.toJson(depools))
+    File(DEPOOL_CACHE_FILE).writeText(gsonParser.toJson(depools))
 }
 
 private fun analyzeDepool(
@@ -380,11 +394,6 @@ private fun analyzeDepool(
     val result: MutableList<DePoolReportEntry> = mutableListOf()
 
     participants.forEach { p ->
-        if (p.toString() == stakeholder) {
-            println()
-            logger.warn("Match found in depool $depoolAddress!")
-        }
-
         //  Getting information about the participant
         val pInfo = depool.getParticipantInfo(p).get()
 
@@ -464,58 +473,43 @@ private fun analyzeDepool(
 
             result.add(entry)
             colored { print(".".bright.green) }
-        } else {
-            //  If locked stake belongs to different account, record it there
-            if (
-                p.toString() != lockDonor &&
-                (
-                    (stakeholder.isNotEmpty() && lockDonor == stakeholder) ||
-                        stakeholder.isEmpty()
-                ) &&
-                lockedRemaining > 0.toBigDecimal()
-            ) {
-                result.add(
-                    DePoolReportEntry(
-                        depoolAddress,
-                        lockDonor,
-                        lockedStake =
-                            LockedOrVestingStakeEntry(
-                                lockedRemaining,
-                                lockedWithdrawal,
-                                LocalDateTime.ofEpochSecond(lockedEndsOn, 0, ZoneOffset.UTC),
-                                lockDonor,
-                                p.toString(),
-                            ),
-                    ),
-                )
-                colored { print(".".bright.yellow) }
-                /*
-                                if (result.containsKey(lockDonor)) {
-                                    result[lockDonor].let { r ->
-                                        if (r!!.lockedStake != null) {
-                                            r.lockedStake!!.apply {
-                                                totalAmount += lockedTotal
-                                                remainingAmount += lockedRemaining
-                                                withdrawableAmount += lockedWithdrawable
-                                            }
-                                        } else {
-                                            r.lockedStake =
-                                                LockedOrVestingStakeEntry(
-                                                    lockedTotal,
-                                                    lockedRemaining,
-                                                    lockedWithdrawable,
-                                                    LocalDateTime.ofEpochSecond(lockedEndsOn, 0, ZoneOffset.UTC),
-                                                    lockDonor,
-                                                    p.toString(),
-                                                )
+        }
+
+        //  If locked stake belongs to different account, record it there
+        if (
+            p.toString() != lockDonor &&
+            (
+                (stakeholder.isNotEmpty() && lockDonor == stakeholder) ||
+                    stakeholder.isEmpty()
+            ) &&
+            lockedRemaining > 0.toBigDecimal()
+        ) {
+            result.add(
+                DePoolReportEntry(
+                    depoolAddress,
+                    lockDonor,
+                    lockedStake =
+                        LockedOrVestingStakeEntry(
+                            lockedRemaining,
+                            lockedWithdrawal,
+                            LocalDateTime.ofEpochSecond(lockedEndsOn, 0, ZoneOffset.UTC),
+                            lockDonor,
+                            p.toString(),
+                        ),
+                ),
+            )
+            colored { print(".".bright.yellow) }
+            /*
+                            if (result.containsKey(lockDonor)) {
+                                result[lockDonor].let { r ->
+                                    if (r!!.lockedStake != null) {
+                                        r.lockedStake!!.apply {
+                                            totalAmount += lockedTotal
+                                            remainingAmount += lockedRemaining
+                                            withdrawableAmount += lockedWithdrawable
                                         }
-                                    }
-                                } else {
-                                    result[lockDonor] =
-                                        DePoolReportEntry(
-                                            depoolAddress,
-                                            lockDonor,
-                                            0.toBigDecimal(),
+                                    } else {
+                                        r.lockedStake =
                                             LockedOrVestingStakeEntry(
                                                 lockedTotal,
                                                 lockedRemaining,
@@ -523,14 +517,29 @@ private fun analyzeDepool(
                                                 LocalDateTime.ofEpochSecond(lockedEndsOn, 0, ZoneOffset.UTC),
                                                 lockDonor,
                                                 p.toString(),
-                                            ),
-                                            null,
-                                        )
+                                            )
+                                    }
                                 }
-                 */
-            } else {
-                print(".")
-            }
+                            } else {
+                                result[lockDonor] =
+                                    DePoolReportEntry(
+                                        depoolAddress,
+                                        lockDonor,
+                                        0.toBigDecimal(),
+                                        LockedOrVestingStakeEntry(
+                                            lockedTotal,
+                                            lockedRemaining,
+                                            lockedWithdrawable,
+                                            LocalDateTime.ofEpochSecond(lockedEndsOn, 0, ZoneOffset.UTC),
+                                            lockDonor,
+                                            p.toString(),
+                                        ),
+                                        null,
+                                    )
+                            }
+             */
+        } else {
+            print(".")
         }
     }
 

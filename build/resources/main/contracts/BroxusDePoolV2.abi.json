@@ -1,0 +1,1032 @@
+{
+    "ABI version": 2,
+    "data": [],
+    "events": [
+        {
+            "inputs": [
+                {
+                    "name": "message",
+                    "type": "string"
+                }
+            ],
+            "name": "Debug",
+            "outputs": []
+        },
+        {
+            "inputs": [],
+            "name": "DePoolClosed",
+            "outputs": []
+        },
+        {
+            "inputs": [
+                {
+                    "name": "queryId",
+                    "type": "uint64"
+                },
+                {
+                    "name": "comment",
+                    "type": "uint32"
+                }
+            ],
+            "name": "RoundStakeIsAccepted",
+            "outputs": []
+        },
+        {
+            "inputs": [
+                {
+                    "name": "queryId",
+                    "type": "uint64"
+                },
+                {
+                    "name": "comment",
+                    "type": "uint32"
+                }
+            ],
+            "name": "RoundStakeIsRejected",
+            "outputs": []
+        },
+        {
+            "inputs": [
+                {
+                    "name": "queryId",
+                    "type": "uint64"
+                }
+            ],
+            "name": "ProxyHasRejectedTheStake",
+            "outputs": []
+        },
+        {
+            "inputs": [
+                {
+                    "name": "roundId",
+                    "type": "uint64"
+                }
+            ],
+            "name": "ProxyHasRejectedRecoverRequest",
+            "outputs": []
+        },
+        {
+            "inputs": [
+                {
+                    "components": [
+                        {
+                            "name": "id",
+                            "type": "uint64"
+                        },
+                        {
+                            "name": "supposedElectedAt",
+                            "type": "uint32"
+                        },
+                        {
+                            "name": "unfreeze",
+                            "type": "uint32"
+                        },
+                        {
+                            "name": "stakeHeldFor",
+                            "type": "uint32"
+                        },
+                        {
+                            "name": "vsetHashInElectionPhase",
+                            "type": "uint256"
+                        },
+                        {
+                            "name": "step",
+                            "type": "uint8"
+                        },
+                        {
+                            "name": "completionReason",
+                            "type": "uint8"
+                        },
+                        {
+                            "name": "stake",
+                            "type": "uint64"
+                        },
+                        {
+                            "name": "recoveredStake",
+                            "type": "uint64"
+                        },
+                        {
+                            "name": "unused",
+                            "type": "uint64"
+                        },
+                        {
+                            "name": "isValidatorStakeCompleted",
+                            "type": "bool"
+                        },
+                        {
+                            "name": "participantReward",
+                            "type": "uint64"
+                        },
+                        {
+                            "name": "participantQty",
+                            "type": "uint32"
+                        },
+                        {
+                            "name": "validatorStake",
+                            "type": "uint64"
+                        },
+                        {
+                            "name": "validatorRemainingStake",
+                            "type": "uint64"
+                        },
+                        {
+                            "name": "handledStakesAndRewards",
+                            "type": "uint64"
+                        }
+                    ],
+                    "name": "round",
+                    "type": "tuple"
+                }
+            ],
+            "name": "RoundCompleted",
+            "outputs": []
+        },
+        {
+            "inputs": [
+                {
+                    "name": "electionId",
+                    "type": "uint32"
+                },
+                {
+                    "name": "proxy",
+                    "type": "address"
+                }
+            ],
+            "name": "StakeSigningRequested",
+            "outputs": []
+        },
+        {
+            "inputs": [
+                {
+                    "name": "replenishment",
+                    "type": "uint256"
+                }
+            ],
+            "name": "TooLowDePoolBalance",
+            "outputs": []
+        },
+        {
+            "inputs": [
+                {
+                    "name": "validator",
+                    "type": "uint8"
+                },
+                {
+                    "name": "participants",
+                    "type": "uint8"
+                }
+            ],
+            "name": "RewardFractionsChanged",
+            "outputs": []
+        },
+        {
+            "inputs": [
+                {
+                    "name": "ec",
+                    "type": "uint16"
+                }
+            ],
+            "name": "InternalError",
+            "outputs": []
+        }
+    ],
+    "fields": [
+        {
+            "name": "_pubkey",
+            "type": "uint256"
+        },
+        {
+            "name": "_timestamp",
+            "type": "uint64"
+        },
+        {
+            "name": "_constructorFlag",
+            "type": "bool"
+        },
+        {
+            "name": "m_validatorWallet",
+            "type": "address"
+        },
+        {
+            "name": "m_proxies",
+            "type": "address[]"
+        },
+        {
+            "components": [
+                {
+                    "name": "roundQty",
+                    "type": "uint8"
+                },
+                {
+                    "name": "reward",
+                    "type": "uint64"
+                },
+                {
+                    "name": "vestingParts",
+                    "type": "uint8"
+                },
+                {
+                    "name": "lockParts",
+                    "type": "uint8"
+                },
+                {
+                    "name": "reinvest",
+                    "type": "bool"
+                },
+                {
+                    "name": "withdrawValue",
+                    "type": "uint64"
+                },
+                {
+                    "name": "vestingDonor",
+                    "type": "address"
+                },
+                {
+                    "name": "lockDonor",
+                    "type": "address"
+                }
+            ],
+            "name": "m_participants",
+            "type": "map(address,tuple)"
+        },
+        {
+            "components": [
+                {
+                    "name": "id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "supposedElectedAt",
+                    "type": "uint32"
+                },
+                {
+                    "name": "unfreeze",
+                    "type": "uint32"
+                },
+                {
+                    "name": "stakeHeldFor",
+                    "type": "uint32"
+                },
+                {
+                    "name": "validatorsElectedFor",
+                    "type": "uint32"
+                },
+                {
+                    "name": "vsetHashInElectionPhase",
+                    "type": "uint256"
+                },
+                {
+                    "name": "step",
+                    "type": "uint8"
+                },
+                {
+                    "name": "completionReason",
+                    "type": "uint8"
+                },
+                {
+                    "name": "stake",
+                    "type": "uint64"
+                },
+                {
+                    "name": "recoveredStake",
+                    "type": "uint64"
+                },
+                {
+                    "name": "unused",
+                    "type": "uint64"
+                },
+                {
+                    "name": "isValidatorStakeCompleted",
+                    "type": "bool"
+                },
+                {
+                    "name": "grossReward",
+                    "type": "uint64"
+                },
+                {
+                    "name": "participantReward",
+                    "type": "uint64"
+                },
+                {
+                    "name": "validatorReward",
+                    "type": "uint64"
+                },
+                {
+                    "name": "participantQty",
+                    "type": "uint32"
+                },
+                {
+                    "components": [
+                        {
+                            "name": "ordinary",
+                            "type": "uint64"
+                        },
+                        {
+                            "components": [
+                                {
+                                    "name": "remainingAmount",
+                                    "type": "uint64"
+                                },
+                                {
+                                    "name": "lastWithdrawalTime",
+                                    "type": "uint64"
+                                },
+                                {
+                                    "name": "withdrawalPeriod",
+                                    "type": "uint32"
+                                },
+                                {
+                                    "name": "withdrawalValue",
+                                    "type": "uint64"
+                                },
+                                {
+                                    "name": "owner",
+                                    "type": "address"
+                                }
+                            ],
+                            "name": "vesting",
+                            "type": "optional(tuple)"
+                        },
+                        {
+                            "components": [
+                                {
+                                    "name": "remainingAmount",
+                                    "type": "uint64"
+                                },
+                                {
+                                    "name": "lastWithdrawalTime",
+                                    "type": "uint64"
+                                },
+                                {
+                                    "name": "withdrawalPeriod",
+                                    "type": "uint32"
+                                },
+                                {
+                                    "name": "withdrawalValue",
+                                    "type": "uint64"
+                                },
+                                {
+                                    "name": "owner",
+                                    "type": "address"
+                                }
+                            ],
+                            "name": "lock",
+                            "type": "optional(tuple)"
+                        }
+                    ],
+                    "name": "stakes",
+                    "type": "map(address,tuple)"
+                },
+                {
+                    "name": "validatorStake",
+                    "type": "uint64"
+                },
+                {
+                    "name": "validatorRemainingStake",
+                    "type": "uint64"
+                },
+                {
+                    "name": "handledStakesAndRewards",
+                    "type": "uint64"
+                },
+                {
+                    "components": [
+                        {
+                            "name": "queryId",
+                            "type": "uint64"
+                        },
+                        {
+                            "name": "validatorKey",
+                            "type": "uint256"
+                        },
+                        {
+                            "name": "stakeAt",
+                            "type": "uint32"
+                        },
+                        {
+                            "name": "maxFactor",
+                            "type": "uint32"
+                        },
+                        {
+                            "name": "adnlAddr",
+                            "type": "uint256"
+                        },
+                        {
+                            "name": "signature",
+                            "type": "bytes"
+                        }
+                    ],
+                    "name": "validatorRequest",
+                    "type": "tuple"
+                },
+                {
+                    "name": "elector",
+                    "type": "address"
+                },
+                {
+                    "name": "proxy",
+                    "type": "address"
+                }
+            ],
+            "name": "m_rounds",
+            "type": "map(uint64,tuple)"
+        },
+        {
+            "name": "m_roundQty",
+            "type": "uint64"
+        },
+        {
+            "name": "lastRoundInfo",
+            "type": "optional(cell)"
+        },
+        {
+            "name": "m_poolClosed",
+            "type": "bool"
+        },
+        {
+            "name": "m_minStake",
+            "type": "uint64"
+        },
+        {
+            "name": "m_validatorAssurance",
+            "type": "uint64"
+        },
+        {
+            "name": "m_participantRewardFraction",
+            "type": "uint8"
+        },
+        {
+            "name": "m_validatorRewardFraction",
+            "type": "uint8"
+        },
+        {
+            "name": "m_balanceThreshold",
+            "type": "uint64"
+        },
+        {
+            "name": "allowedParticipants",
+            "type": "map(address,bool)"
+        }
+    ],
+    "functions": [
+        {
+            "inputs": [
+                {
+                    "name": "minStake",
+                    "type": "uint64"
+                },
+                {
+                    "name": "validatorAssurance",
+                    "type": "uint64"
+                },
+                {
+                    "name": "proxyCode",
+                    "type": "cell"
+                },
+                {
+                    "name": "validatorWallet",
+                    "type": "address"
+                },
+                {
+                    "name": "participantRewardFraction",
+                    "type": "uint8"
+                }
+            ],
+            "name": "constructor",
+            "outputs": []
+        },
+        {
+            "inputs": [
+                {
+                    "name": "_allowedParticipant",
+                    "type": "address"
+                }
+            ],
+            "name": "setAllowedParticipant",
+            "outputs": []
+        },
+        {
+            "inputs": [
+                {
+                    "name": "stake",
+                    "type": "uint64"
+                }
+            ],
+            "name": "addOrdinaryStake",
+            "outputs": []
+        },
+        {
+            "inputs": [
+                {
+                    "name": "withdrawValue",
+                    "type": "uint64"
+                }
+            ],
+            "name": "withdrawFromPoolingRound",
+            "outputs": []
+        },
+        {
+            "inputs": [
+                {
+                    "name": "stake",
+                    "type": "uint64"
+                },
+                {
+                    "name": "beneficiary",
+                    "type": "address"
+                },
+                {
+                    "name": "withdrawalPeriod",
+                    "type": "uint32"
+                },
+                {
+                    "name": "totalPeriod",
+                    "type": "uint32"
+                }
+            ],
+            "name": "addVestingStake",
+            "outputs": []
+        },
+        {
+            "inputs": [
+                {
+                    "name": "stake",
+                    "type": "uint64"
+                },
+                {
+                    "name": "beneficiary",
+                    "type": "address"
+                },
+                {
+                    "name": "withdrawalPeriod",
+                    "type": "uint32"
+                },
+                {
+                    "name": "totalPeriod",
+                    "type": "uint32"
+                }
+            ],
+            "name": "addLockStake",
+            "outputs": []
+        },
+        {
+            "inputs": [
+                {
+                    "name": "withdrawValue",
+                    "type": "uint64"
+                }
+            ],
+            "name": "withdrawPart",
+            "outputs": []
+        },
+        {
+            "inputs": [],
+            "name": "withdrawAll",
+            "outputs": []
+        },
+        {
+            "inputs": [],
+            "name": "cancelWithdrawal",
+            "outputs": []
+        },
+        {
+            "inputs": [
+                {
+                    "name": "donor",
+                    "type": "address"
+                }
+            ],
+            "name": "setVestingDonor",
+            "outputs": []
+        },
+        {
+            "inputs": [
+                {
+                    "name": "donor",
+                    "type": "address"
+                }
+            ],
+            "name": "setLockDonor",
+            "outputs": []
+        },
+        {
+            "inputs": [
+                {
+                    "name": "dest",
+                    "type": "address"
+                },
+                {
+                    "name": "amount",
+                    "type": "uint64"
+                }
+            ],
+            "name": "transferStake",
+            "outputs": []
+        },
+        {
+            "id": "0x4E73744B",
+            "inputs": [
+                {
+                    "name": "queryId",
+                    "type": "uint64"
+                },
+                {
+                    "name": "validatorKey",
+                    "type": "uint256"
+                },
+                {
+                    "name": "stakeAt",
+                    "type": "uint32"
+                },
+                {
+                    "name": "maxFactor",
+                    "type": "uint32"
+                },
+                {
+                    "name": "adnlAddr",
+                    "type": "uint256"
+                },
+                {
+                    "name": "signature",
+                    "type": "bytes"
+                }
+            ],
+            "name": "participateInElections",
+            "outputs": []
+        },
+        {
+            "inputs": [],
+            "name": "ticktock",
+            "outputs": []
+        },
+        {
+            "inputs": [
+                {
+                    "name": "roundId",
+                    "type": "uint64"
+                },
+                {
+                    "name": "chunkSize",
+                    "type": "uint8"
+                }
+            ],
+            "name": "completeRoundWithChunk",
+            "outputs": []
+        },
+        {
+            "inputs": [
+                {
+                    "name": "roundId",
+                    "type": "uint64"
+                },
+                {
+                    "name": "participantQty",
+                    "type": "uint32"
+                }
+            ],
+            "name": "completeRound",
+            "outputs": []
+        },
+        {
+            "inputs": [
+                {
+                    "name": "queryId",
+                    "type": "uint64"
+                },
+                {
+                    "name": "comment",
+                    "type": "uint32"
+                },
+                {
+                    "name": "elector",
+                    "type": "address"
+                }
+            ],
+            "name": "onStakeAccept",
+            "outputs": []
+        },
+        {
+            "inputs": [
+                {
+                    "name": "queryId",
+                    "type": "uint64"
+                },
+                {
+                    "name": "comment",
+                    "type": "uint32"
+                },
+                {
+                    "name": "elector",
+                    "type": "address"
+                }
+            ],
+            "name": "onStakeReject",
+            "outputs": []
+        },
+        {
+            "inputs": [
+                {
+                    "name": "queryId",
+                    "type": "uint64"
+                },
+                {
+                    "name": "elector",
+                    "type": "address"
+                }
+            ],
+            "name": "onSuccessToRecoverStake",
+            "outputs": []
+        },
+        {
+            "inputs": [
+                {
+                    "name": "queryId",
+                    "type": "uint64"
+                },
+                {
+                    "name": "elector",
+                    "type": "address"
+                }
+            ],
+            "name": "onFailToRecoverStake",
+            "outputs": []
+        },
+        {
+            "inputs": [],
+            "name": "terminator",
+            "outputs": []
+        },
+        {
+            "inputs": [
+                {
+                    "name": "fraction",
+                    "type": "uint8"
+                }
+            ],
+            "name": "setValidatorRewardFraction",
+            "outputs": []
+        },
+        {
+            "inputs": [],
+            "name": "receiveFunds",
+            "outputs": []
+        },
+        {
+            "inputs": [],
+            "name": "getLastRoundInfo",
+            "outputs": []
+        },
+        {
+            "inputs": [
+                {
+                    "name": "addr",
+                    "type": "address"
+                }
+            ],
+            "name": "getParticipantInfo",
+            "outputs": [
+                {
+                    "name": "total",
+                    "type": "uint64"
+                },
+                {
+                    "name": "withdrawValue",
+                    "type": "uint64"
+                },
+                {
+                    "name": "reinvest",
+                    "type": "bool"
+                },
+                {
+                    "name": "reward",
+                    "type": "uint64"
+                },
+                {
+                    "name": "stakes",
+                    "type": "map(uint64,uint64)"
+                },
+                {
+                    "components": [
+                        {
+                            "name": "remainingAmount",
+                            "type": "uint64"
+                        },
+                        {
+                            "name": "lastWithdrawalTime",
+                            "type": "uint64"
+                        },
+                        {
+                            "name": "withdrawalPeriod",
+                            "type": "uint32"
+                        },
+                        {
+                            "name": "withdrawalValue",
+                            "type": "uint64"
+                        },
+                        {
+                            "name": "owner",
+                            "type": "address"
+                        }
+                    ],
+                    "name": "vestings",
+                    "type": "map(uint64,tuple)"
+                },
+                {
+                    "components": [
+                        {
+                            "name": "remainingAmount",
+                            "type": "uint64"
+                        },
+                        {
+                            "name": "lastWithdrawalTime",
+                            "type": "uint64"
+                        },
+                        {
+                            "name": "withdrawalPeriod",
+                            "type": "uint32"
+                        },
+                        {
+                            "name": "withdrawalValue",
+                            "type": "uint64"
+                        },
+                        {
+                            "name": "owner",
+                            "type": "address"
+                        }
+                    ],
+                    "name": "locks",
+                    "type": "map(uint64,tuple)"
+                },
+                {
+                    "name": "vestingDonor",
+                    "type": "address"
+                },
+                {
+                    "name": "lockDonor",
+                    "type": "address"
+                }
+            ]
+        },
+        {
+            "inputs": [],
+            "name": "getDePoolInfo",
+            "outputs": [
+                {
+                    "name": "poolClosed",
+                    "type": "bool"
+                },
+                {
+                    "name": "minStake",
+                    "type": "uint64"
+                },
+                {
+                    "name": "validatorAssurance",
+                    "type": "uint64"
+                },
+                {
+                    "name": "participantRewardFraction",
+                    "type": "uint8"
+                },
+                {
+                    "name": "validatorRewardFraction",
+                    "type": "uint8"
+                },
+                {
+                    "name": "balanceThreshold",
+                    "type": "uint64"
+                },
+                {
+                    "name": "validatorWallet",
+                    "type": "address"
+                },
+                {
+                    "name": "proxies",
+                    "type": "address[]"
+                },
+                {
+                    "name": "stakeFee",
+                    "type": "uint64"
+                },
+                {
+                    "name": "retOrReinvFee",
+                    "type": "uint64"
+                },
+                {
+                    "name": "proxyFee",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "inputs": [],
+            "name": "getParticipants",
+            "outputs": [
+                {
+                    "name": "participants",
+                    "type": "address[]"
+                }
+            ]
+        },
+        {
+            "inputs": [],
+            "name": "getDePoolBalance",
+            "outputs": [
+                {
+                    "name": "value0",
+                    "type": "int256"
+                }
+            ]
+        },
+        {
+            "inputs": [],
+            "name": "getRounds",
+            "outputs": [
+                {
+                    "components": [
+                        {
+                            "name": "id",
+                            "type": "uint64"
+                        },
+                        {
+                            "name": "supposedElectedAt",
+                            "type": "uint32"
+                        },
+                        {
+                            "name": "unfreeze",
+                            "type": "uint32"
+                        },
+                        {
+                            "name": "stakeHeldFor",
+                            "type": "uint32"
+                        },
+                        {
+                            "name": "vsetHashInElectionPhase",
+                            "type": "uint256"
+                        },
+                        {
+                            "name": "step",
+                            "type": "uint8"
+                        },
+                        {
+                            "name": "completionReason",
+                            "type": "uint8"
+                        },
+                        {
+                            "name": "stake",
+                            "type": "uint64"
+                        },
+                        {
+                            "name": "recoveredStake",
+                            "type": "uint64"
+                        },
+                        {
+                            "name": "unused",
+                            "type": "uint64"
+                        },
+                        {
+                            "name": "isValidatorStakeCompleted",
+                            "type": "bool"
+                        },
+                        {
+                            "name": "participantReward",
+                            "type": "uint64"
+                        },
+                        {
+                            "name": "participantQty",
+                            "type": "uint32"
+                        },
+                        {
+                            "name": "validatorStake",
+                            "type": "uint64"
+                        },
+                        {
+                            "name": "validatorRemainingStake",
+                            "type": "uint64"
+                        },
+                        {
+                            "name": "handledStakesAndRewards",
+                            "type": "uint64"
+                        }
+                    ],
+                    "name": "rounds",
+                    "type": "map(uint64,tuple)"
+                }
+            ]
+        },
+        {
+            "inputs": [],
+            "name": "allowedParticipants",
+            "outputs": [
+                {
+                    "name": "allowedParticipants",
+                    "type": "map(address,bool)"
+                }
+            ]
+        }
+    ],
+    "header": [
+        "time",
+        "expire"
+    ],
+    "version": "2.2"
+}
